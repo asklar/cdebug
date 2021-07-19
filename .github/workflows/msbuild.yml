@@ -23,9 +23,15 @@ jobs:
 
     - name: Make local NuGet package
       run: nuget pack
-      
-    - name: Copy NuGet package
-      run: copy NuGet*.nupkg $env:APPDATA\NuGet
+
+    - name: Add local NuGet feed
+      run: nuget sources Add -Name cdebug -Source .
+
+    - name: List NuGet feeds
+      run: nuget sources list
+
+    - name: Push NuGet package
+      run: nuget push CDebug*.nupkg -ApiKey api -Source cdebug
       
     - name: Restore NuGet packages
       working-directory: ${{env.GITHUB_WORKSPACE}}
