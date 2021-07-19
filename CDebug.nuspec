@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<package >
+  <metadata>
+    <id>CDebug</id>
+    <version>0.0.1</version>
+    <authors>Alexander Sklar</authors>
+    <owners>Alexander Sklar</owners>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <license type="file">LICENSE.txt</license>
+    <projectUrl>https://github.com/asklar/cdebug</projectUrl>
+    <description>Stream-like C++ API for writing to the Windows debugger output</description>
+    <copyright>Copyright Alexander Sklar (c) 2021</copyright>
+    <tags>CDebug debug diagnostics OutputDebugString cout</tags>
+    <dependencies>
+    </dependencies>
+  </metadata>
+  <files>
+    <file src="CDebug\*.h" target="inc" />
+    <file src="CDebug\*.cpp" target="inc" />
+    <file src="build\*" target="build" />
+    <file src="LICENSE.txt" target="" />
+  </files>
+</package>
