@@ -145,13 +145,16 @@
     <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <PropertyGroup>
+    <CDebugVersion>0.0.2</CDebugVersion>
+  </PropertyGroup>
   <ImportGroup Label="ExtensionTargets">
-    <Import Project="..\CDebug\packages\CDebug.0.0.1\build\CDebug.targets" Condition="Exists('..\CDebug\packages\CDebug.0.0.1\build\CDebug.targets')" />
+    <Import Project="..\CDebug\packages\CDebug.$(CDebugVersion)\build\CDebug.targets" Condition="Exists('..\CDebug\packages\CDebug.$(CDebugVersion)\build\CDebug.targets')" />
   </ImportGroup>
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>
       <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
     </PropertyGroup>
-    <Error Condition="!Exists('..\CDebug\packages\CDebug.0.0.1\build\CDebug.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\CDebug\packages\CDebug.0.0.1\build\CDebug.targets'))" />
+    <Error Condition="!Exists('..\CDebug\packages\CDebug.$(CDebugVersion)\build\CDebug.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\CDebug\packages\CDebug.$(CDebugVersion)\build\CDebug.targets'))" />
   </Target>
 </Project>
