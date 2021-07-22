@@ -3,39 +3,52 @@
 #include <windows.h>
 #include <ostream>
 #include <sstream>
+#include <string_view>
 
-template <typename CharT = char>
-struct debugbuffer_t : public std::basic_stringbuf<CharT, std::char_traits<CharT>> {
-  virtual ~debugbuffer_t() {
-    sync();
-  }
+struct cdebug_t : std::streambuf, std::ostream {
+  cdebug_t() : std::ostream(this) {}
 
-  virtual int sync() override {
-    _OutputDebugString(this->str().c_str());
-    this->str(std::basic_string<CharT>());
+  std::streambuf::int_type overflow(std::streambuf::int_type c)
+  {
+    char v[2] = { (char)c, 0 };
+    OutputDebugStringA(v);
     return 0;
   }
-
-private:
-  void _OutputDebugString(PCSTR str) {
-    ::OutputDebugStringA(str);
-  }
-  void _OutputDebugString(PCWSTR str) {
-    ::OutputDebugStringW(str);
-  }
 };
 
-template <class CharT>
-class basic_dostream : public std::basic_ostream<CharT> {
-public:
-  basic_dostream() : std::basic_ostream<CharT>(new debugbuffer_t<CharT>()) {}
-  ~basic_dostream() {
-    delete this->rdbuf();
-  }
-};
+inline cdebug_t& operator<<(cdebug_t& os, const wchar_t* v) {
+  OutputDebugStringW(v);
+  return os;
+}
 
-__declspec(selectany) basic_dostream<char> cdebug;
-__declspec(selectany) basic_dostream<wchar_t> cwdebug;
+inline cdebug_t& operator<<(cdebug_t& os, const char* v) {
+  OutputDebugStringA(v);
+  return os;
+}
+
+inline cdebug_t& operator<<(cdebug_t& os, const std::string& v) {
+  OutputDebugStringA(v.c_str());
+  return os;
+}
+
+inline cdebug_t& operator<<(cdebug_t& os, const std::wstring& v) {
+  OutputDebugStringW(v.c_str());
+  return os;
+}
+
+inline cdebug_t& operator<<(cdebug_t& os, const std::string_view& v) {
+  OutputDebugStringA(v.data());
+  return os;
+}
+
+inline cdebug_t& operator<<(cdebug_t& os, const std::wstring_view& v) {
+  OutputDebugStringW(v.data());
+  return os;
+}
+
+
+__declspec(selectany) cdebug_t cdebug;
+
 
 #define DEBUG_HRESULT_ERROR(e)                    \
   cdebug << __FILE__ << " (" << __LINE__ << ") "; \
